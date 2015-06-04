@@ -10,6 +10,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -59,9 +60,16 @@ public class MainActivity extends ActionBarActivity {
         });
 
         hideCheckBox = (CheckBox) findViewById(R.id.checkBox);
+        hideCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                editor.putBoolean("hide", isChecked);
+                editor.commit();
+            }
+        });
 
         inputEditText.setText(sp.getString("input", ""));
-
+        hideCheckBox.setChecked(sp.getBoolean("hide", false));
     }
 
     private void send() {
