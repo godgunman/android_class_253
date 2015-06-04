@@ -27,6 +27,7 @@ public class MainActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        // /data/data/com.example.simple/shared_prefs/settings.xml
         sp = getSharedPreferences("settings", Context.MODE_PRIVATE);
         editor = sp.edit();
 
