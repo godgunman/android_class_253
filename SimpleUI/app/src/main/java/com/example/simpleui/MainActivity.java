@@ -1,5 +1,7 @@
 package com.example.simpleui;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.KeyEvent;
@@ -17,15 +19,26 @@ public class MainActivity extends ActionBarActivity {
     private Button sendButton;
     private CheckBox hideCheckBox;
 
+    private SharedPreferences sp;
+    private SharedPreferences.Editor editor;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        sp = getSharedPreferences("settings", Context.MODE_PRIVATE);
+        editor = sp.edit();
+
         inputEditText = (EditText) findViewById(R.id.editText);
         inputEditText.setOnKeyListener(new View.OnKeyListener() {
             @Override
             public boolean onKey(View v, int keyCode, KeyEvent event) {
+
+                String text = inputEditText.getText().toString();
+                editor.putString("input", text);
+                editor.commit();
+
                 if (keyCode == KeyEvent.KEYCODE_ENTER) {
                     if (event.getAction() == KeyEvent.ACTION_DOWN) {
                         send();
@@ -45,6 +58,8 @@ public class MainActivity extends ActionBarActivity {
         });
 
         hideCheckBox = (CheckBox) findViewById(R.id.checkBox);
+
+        inputEditText.setText(sp.getString("input", ""));
 
     }
 
