@@ -2,6 +2,7 @@ package com.example.simpleui;
 
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -20,8 +21,20 @@ public class MainActivity extends ActionBarActivity {
         setContentView(R.layout.activity_main);
 
         inputEditText = (EditText) findViewById(R.id.editText);
-        sendButton = (Button) findViewById(R.id.button);
+        inputEditText.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if (keyCode == KeyEvent.KEYCODE_ENTER) {
+                    if (event.getAction() == KeyEvent.ACTION_DOWN) {
+                        send();
+                    }
+                    return true;
+                }
+                return false;
+            }
+        });
 
+        sendButton = (Button) findViewById(R.id.button);
         sendButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -35,6 +48,11 @@ public class MainActivity extends ActionBarActivity {
 
         String text = inputEditText.getText().toString();
         Toast.makeText(this, text, Toast.LENGTH_SHORT).show();
+        inputEditText.setText("");
+    }
+
+    public void send2(View view) {
+        send();
     }
 
     @Override

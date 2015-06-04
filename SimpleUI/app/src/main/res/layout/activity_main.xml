@@ -26,4 +26,14 @@
         android:layout_alignRight="@+id/editText"
         android:layout_alignEnd="@+id/editText" />
 
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="SEND2"
+        android:id="@+id/button2"
+        android:layout_below="@+id/button"
+        android:layout_alignLeft="@+id/button"
+        android:layout_alignStart="@+id/button"
+        android:onClick="send2" />
+
 </RelativeLayout>
