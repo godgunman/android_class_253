@@ -7,6 +7,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -14,6 +15,7 @@ public class MainActivity extends ActionBarActivity {
 
     private EditText inputEditText;
     private Button sendButton;
+    private CheckBox hideCheckBox;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,11 +44,17 @@ public class MainActivity extends ActionBarActivity {
             }
         });
 
+        hideCheckBox = (CheckBox) findViewById(R.id.checkBox);
+
     }
 
     private void send() {
 
         String text = inputEditText.getText().toString();
+        if (hideCheckBox.isChecked()) {
+            text = "*************";
+        }
+
         Toast.makeText(this, text, Toast.LENGTH_SHORT).show();
         inputEditText.setText("");
     }
