@@ -53,4 +53,14 @@
         android:layout_below="@+id/button2"
         android:layout_centerHorizontal="true" />
 
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="menu"
+        android:id="@+id/button3"
+        android:layout_above="@+id/button2"
+        android:layout_toLeftOf="@+id/button"
+        android:layout_toStartOf="@+id/button"
+        android:onClick="goToMenu" />
+
 </RelativeLayout>

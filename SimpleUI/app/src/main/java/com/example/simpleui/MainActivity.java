@@ -103,6 +103,10 @@ public class MainActivity extends ActionBarActivity {
         setHistoryData();
     }
 
+    public void goToMenu(View view) {
+
+    }
+
     public void send2(View view) {
         send();
     }
