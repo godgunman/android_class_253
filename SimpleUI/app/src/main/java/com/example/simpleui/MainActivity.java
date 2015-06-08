@@ -8,10 +8,13 @@ import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 public class MainActivity extends ActionBarActivity {
@@ -19,6 +22,7 @@ public class MainActivity extends ActionBarActivity {
     private EditText inputEditText;
     private Button sendButton;
     private CheckBox hideCheckBox;
+    private ListView historyListView;
 
     private SharedPreferences sp;
     private SharedPreferences.Editor editor;
@@ -59,6 +63,8 @@ public class MainActivity extends ActionBarActivity {
             }
         });
 
+        historyListView = (ListView) findViewById(R.id.listView);
+
         hideCheckBox = (CheckBox) findViewById(R.id.checkBox);
         hideCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -70,6 +76,17 @@ public class MainActivity extends ActionBarActivity {
 
         inputEditText.setText(sp.getString("input", ""));
         hideCheckBox.setChecked(sp.getBoolean("hide", false));
+
+        setHistoryData();
+    }
+
+    private void setHistoryData() {
+        String raw = Utils.readFile(this, "history.txt");
+        String[] data = raw.split("\n");
+
+        ArrayAdapter<String> adapter =
+                new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, data);
+        historyListView.setAdapter(adapter);
     }
 
     private void send() {
@@ -79,11 +96,11 @@ public class MainActivity extends ActionBarActivity {
             text = "*************";
         }
 
-        Utils.writeFile(this, "history.txt", text);
-        text = Utils.readFile(this, "history.txt");
-
+        Utils.writeFile(this, "history.txt", text + "\n");
         Toast.makeText(this, text, Toast.LENGTH_SHORT).show();
         inputEditText.setText("");
+
+        setHistoryData();
     }
 
     public void send2(View view) {
