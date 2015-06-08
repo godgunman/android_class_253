@@ -79,6 +79,8 @@ public class MainActivity extends ActionBarActivity {
             text = "*************";
         }
 
+        Utils.writeFile(this, text);
+
         Toast.makeText(this, text, Toast.LENGTH_SHORT).show();
         inputEditText.setText("");
     }
