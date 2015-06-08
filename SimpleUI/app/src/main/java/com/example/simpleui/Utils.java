@@ -13,11 +13,11 @@ import java.io.IOException;
 public class Utils {
 
 
-    public static void writeFile(Context context, String fileContent) {
+    public static void writeFile(Context context, String fileName, String fileContent) {
 
         // /data/data/com.example.simple/files/history.txt
         try {
-            FileOutputStream fos = context.openFileOutput("history.txt", Context.MODE_APPEND);
+            FileOutputStream fos = context.openFileOutput(fileName, Context.MODE_APPEND);
             fos.write(fileContent.getBytes());
             fos.close();
 
