@@ -81,6 +81,8 @@ public class MainActivity extends ActionBarActivity {
 
         Utils.writeFile(this, text);
 
+        text = Utils.readFile(this, "history.txt");
+
         Toast.makeText(this, text, Toast.LENGTH_SHORT).show();
         inputEditText.setText("");
     }
