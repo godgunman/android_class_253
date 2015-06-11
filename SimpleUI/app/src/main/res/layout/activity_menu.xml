@@ -25,21 +25,24 @@
             android:layout_height="wrap_content"
             android:text="0"
             android:id="@+id/button4"
-            android:layout_weight="2" />
+            android:layout_weight="2"
+            android:onClick="pick" />
 
         <Button
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="0"
             android:id="@+id/button5"
-            android:layout_weight="2" />
+            android:layout_weight="2"
+            android:onClick="pick"/>
 
         <Button
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="0"
             android:id="@+id/button6"
-            android:layout_weight="2" />
+            android:layout_weight="2"
+            android:onClick="pick"/>
     </LinearLayout>
 
     <LinearLayout
@@ -60,21 +63,24 @@
             android:layout_height="wrap_content"
             android:text="0"
             android:id="@+id/button7"
-            android:layout_weight="2" />
+            android:layout_weight="2"
+            android:onClick="pick"/>
 
         <Button
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="0"
             android:id="@+id/button8"
-            android:layout_weight="2" />
+            android:layout_weight="2"
+            android:onClick="pick"/>
 
         <Button
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="0"
             android:id="@+id/button9"
-            android:layout_weight="2" />
+            android:layout_weight="2"
+            android:onClick="pick"/>
     </LinearLayout>
 
     <LinearLayout
@@ -95,21 +101,24 @@
             android:layout_height="wrap_content"
             android:text="0"
             android:id="@+id/button10"
-            android:layout_weight="2" />
+            android:layout_weight="2"
+            android:onClick="pick"/>
 
         <Button
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="0"
             android:id="@+id/button11"
-            android:layout_weight="2" />
+            android:layout_weight="2"
+            android:onClick="pick"/>
 
         <Button
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="0"
             android:id="@+id/button12"
-            android:layout_weight="2" />
+            android:layout_weight="2"
+            android:onClick="pick"/>
     </LinearLayout>
 
 </LinearLayout>

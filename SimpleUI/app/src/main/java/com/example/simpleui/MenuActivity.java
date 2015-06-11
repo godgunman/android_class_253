@@ -4,6 +4,8 @@ import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 
 
 public class MenuActivity extends ActionBarActivity {
@@ -19,6 +21,13 @@ public class MenuActivity extends ActionBarActivity {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_menu, menu);
         return true;
+    }
+
+    public void pick(View view) {
+        Button button = (Button) view;
+        String text = button.getText().toString();
+        int count = Integer.parseInt(text) + 1;
+        button.setText(String.valueOf(count));
     }
 
     @Override
