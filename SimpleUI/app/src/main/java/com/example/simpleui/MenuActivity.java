@@ -10,6 +10,10 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 
 public class MenuActivity extends ActionBarActivity {
 
@@ -30,7 +34,8 @@ public class MenuActivity extends ActionBarActivity {
         LinearLayout root = (LinearLayout) findViewById(R.id.root);
         int count = root.getChildCount();
 
-        String all = "";
+        JSONObject data = new JSONObject();
+        JSONArray result = new JSONArray();
 
         for (int i = 0 ; i < count - 1; i++) {
             LinearLayout child = (LinearLayout) root.getChildAt(i);
@@ -39,14 +44,41 @@ public class MenuActivity extends ActionBarActivity {
             Button mediumButton = (Button) child.getChildAt(2);
             Button largeButton = (Button) child.getChildAt(3);
 
+            JSONObject drinkStatus = new JSONObject();
+
             String drinkName = drinkNameTextView.getText().toString();
             int small = Integer.parseInt(smallButton.getText().toString());
             int medium = Integer.parseInt(mediumButton.getText().toString());
             int large = Integer.parseInt(largeButton.getText().toString());
 
-            all += drinkName + "," + small + "," + medium + "," + large + "\n";
+            try {
+                drinkStatus.put("drinkName", drinkName);
+                drinkStatus.put("s", small);
+                drinkStatus.put("m", medium);
+                drinkStatus.put("l", large);
+                result.put(drinkStatus);
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
         }
-        return all;
+
+        try {
+            data.put("result", result);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        return data.toString();
+/*
+        {
+            result: [
+                {"drinkName": "black tea", "s": 0, "m": 1, "l":1},
+                {"drinkName": "milk tea", "s": 0, "m": 1, "l":1},
+                {"drinkName": "green tea", "s": 0, "m": 1, "l":1}
+            ]
+        }
+*/
     }
 
     public void pick(View view) {
