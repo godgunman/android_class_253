@@ -6,6 +6,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+import android.widget.Toast;
 
 
 public class MenuActivity extends ActionBarActivity {
@@ -23,11 +26,39 @@ public class MenuActivity extends ActionBarActivity {
         return true;
     }
 
+    public String getData() {
+        LinearLayout root = (LinearLayout) findViewById(R.id.root);
+        int count = root.getChildCount();
+
+        String all = "";
+
+        for (int i = 0 ; i < count - 1; i++) {
+            LinearLayout child = (LinearLayout) root.getChildAt(i);
+            TextView drinkNameTextView = (TextView) child.getChildAt(0);
+            Button smallButton = (Button) child.getChildAt(1);
+            Button mediumButton = (Button) child.getChildAt(2);
+            Button largeButton = (Button) child.getChildAt(3);
+
+            String drinkName = drinkNameTextView.getText().toString();
+            int small = Integer.parseInt(smallButton.getText().toString());
+            int medium = Integer.parseInt(mediumButton.getText().toString());
+            int large = Integer.parseInt(largeButton.getText().toString());
+
+            all += drinkName + "," + small + "," + medium + "," + large + "\n";
+        }
+        return all;
+    }
+
     public void pick(View view) {
         Button button = (Button) view;
         String text = button.getText().toString();
         int count = Integer.parseInt(text) + 1;
         button.setText(String.valueOf(count));
+    }
+
+    public void done(View view) {
+        Toast.makeText(this, getData(), Toast.LENGTH_LONG).show();
+        finish();
     }
 
     @Override
