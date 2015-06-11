@@ -19,6 +19,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -92,6 +93,24 @@ public class MainActivity extends ActionBarActivity {
         String raw = Utils.readFile(this, "history.txt");
         String[] data = raw.split("\n");
 
+        for(int i = 0 ; i < data.length; i++) {
+            try {
+                JSONObject order = new JSONObject(data[i]);
+                String note = order.getString("note");
+                JSONArray menu = order.getJSONArray("menu");
+                for (int j = 0; j < menu.length(); i++) {
+                    JSONObject menuObj = menu.getJSONObject(j);
+                    String drinkName = menuObj.getString("drinkName");
+                    int s = menuObj.getInt("s");
+                    int m = menuObj.getInt("m");
+                    int l = menuObj.getInt("l");
+                }
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+
         ArrayAdapter<String> adapter =
                 new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, data);
         historyListView.setAdapter(adapter);
@@ -108,7 +127,9 @@ public class MainActivity extends ActionBarActivity {
 
         try {
             order.put("note", text);
-            order.put("menu", menuInfo.getJSONArray("result"));
+            if (menuInfo != null) {
+                order.put("menu", menuInfo.getJSONArray("result"));
+            }
         } catch (JSONException e) {
             e.printStackTrace();
         }
