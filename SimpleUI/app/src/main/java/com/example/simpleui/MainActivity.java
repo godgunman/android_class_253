@@ -19,6 +19,9 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 public class MainActivity extends ActionBarActivity {
 
     private static final int REQUEST_CODE_MENU_ACTIVITY = 1;
@@ -29,6 +32,8 @@ public class MainActivity extends ActionBarActivity {
 
     private SharedPreferences sp;
     private SharedPreferences.Editor editor;
+
+    private JSONObject menuInfo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -94,17 +99,37 @@ public class MainActivity extends ActionBarActivity {
 
     private void send() {
 
+        JSONObject order = new JSONObject();
+
         String text = inputEditText.getText().toString();
         if (hideCheckBox.isChecked()) {
             text = "*************";
         }
 
-        Utils.writeFile(this, "history.txt", text + "\n");
-        Toast.makeText(this, text, Toast.LENGTH_SHORT).show();
+        try {
+            order.put("note", text);
+            order.put("menu", menuInfo.getJSONArray("result"));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        Utils.writeFile(this, "history.txt", order.toString() + "\n");
+        Toast.makeText(this, order.toString(), Toast.LENGTH_SHORT).show();
         inputEditText.setText("");
 
         setHistoryData();
     }
+    /*
+        {
+            "note": "hello world",
+            "menu": [
+                {"drinkName": "black tea", "s": 0, "m": 1, "l":1},
+                {"drinkName": "milk tea", "s": 0, "m": 1, "l":1},
+                {"drinkName": "green tea", "s": 0, "m": 1, "l":1}
+            ]
+        }
+    */
+
 
     public void goToMenu(View view) {
 
@@ -116,10 +141,14 @@ public class MainActivity extends ActionBarActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        Log.d("debug", "" + requestCode);
-        Log.d("debug", "" + resultCode);
-        Log.d("debug", data.getStringExtra("data"));
+
+        if (requestCode == REQUEST_CODE_MENU_ACTIVITY && resultCode == RESULT_OK) {
+            try {
+                menuInfo = new JSONObject(data.getStringExtra("data"));
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     public void send2(View view) {
