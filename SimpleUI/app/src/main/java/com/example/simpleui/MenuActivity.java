@@ -1,5 +1,6 @@
 package com.example.simpleui;
 
+import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -89,7 +90,10 @@ public class MenuActivity extends ActionBarActivity {
     }
 
     public void done(View view) {
-        Toast.makeText(this, getData(), Toast.LENGTH_LONG).show();
+        Intent intent = new Intent();
+        intent.putExtra("data", getData());
+
+        setResult(RESULT_OK, intent);
         finish();
     }
 

@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -20,6 +21,7 @@ import android.widget.Toast;
 
 public class MainActivity extends ActionBarActivity {
 
+    private static final int REQUEST_CODE_MENU_ACTIVITY = 1;
     private EditText inputEditText;
     private Button sendButton;
     private CheckBox hideCheckBox;
@@ -108,8 +110,16 @@ public class MainActivity extends ActionBarActivity {
 
         Intent intent = new Intent();
         intent.setClass(this, MenuActivity.class);
-        startActivity(intent);
+        startActivityForResult(intent, REQUEST_CODE_MENU_ACTIVITY);
 
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        Log.d("debug", "" + requestCode);
+        Log.d("debug", "" + resultCode);
+        Log.d("debug", data.getStringExtra("data"));
     }
 
     public void send2(View view) {
