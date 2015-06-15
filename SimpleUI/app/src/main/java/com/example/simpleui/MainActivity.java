@@ -21,6 +21,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.parse.Parse;
+import com.parse.ParseObject;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -54,7 +55,6 @@ public class MainActivity extends ActionBarActivity {
         Parse.enableLocalDatastore(this);
         Parse.initialize(this, "PihJMpOOpNYxpXN8wYcd3Jvn6R1x6IHOl6TA5gKc",
                 "mnPmwNUDinSNH3b4RRiScFdkNRgLFxK61DVIpXYI");
-
 
         // /data/data/com.example.simple/shared_prefs/settings.xml
         sp = getSharedPreferences("settings", Context.MODE_PRIVATE);
@@ -174,6 +174,13 @@ public class MainActivity extends ActionBarActivity {
             if (menuInfo != null) {
                 order.put("menu", menuInfo.getJSONArray("result"));
             }
+
+            ParseObject orderObject = new ParseObject("Order");
+            orderObject.put("note", order.getString("note"));
+            orderObject.put("menu", order.getJSONArray("menu"));
+            orderObject.saveInBackground();
+
+
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -181,6 +188,7 @@ public class MainActivity extends ActionBarActivity {
         Utils.writeFile(this, "history.txt", order.toString() + "\n");
         Toast.makeText(this, order.toString(), Toast.LENGTH_SHORT).show();
         inputEditText.setText("");
+
 
         setHistoryData();
     }
