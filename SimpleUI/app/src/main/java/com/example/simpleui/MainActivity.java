@@ -186,6 +186,7 @@ public class MainActivity extends ActionBarActivity {
                 @Override
                 public void done(ParseException e) {
                     Log.d("debug", "done");
+                    setHistoryData();
                 }
             });
 
@@ -200,7 +201,6 @@ public class MainActivity extends ActionBarActivity {
         inputEditText.setText("");
 
 
-        setHistoryData();
     }
     /*
         {
