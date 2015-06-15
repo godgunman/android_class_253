@@ -100,7 +100,22 @@ public class MainActivity extends ActionBarActivity {
         return "black tea, milk tea";
     }
 
-    private int getDrinkSum() {
+    private int getDrinkSum(JSONArray menu) {
+
+        try {
+            int sum = 0;
+            for (int j = 0; j < menu.length(); j++) {
+                JSONObject menuObj = menu.getJSONObject(j);
+                String drinkName = menuObj.getString("drinkName");
+                int s = menuObj.getInt("s");
+                int m = menuObj.getInt("m");
+                int l = menuObj.getInt("l");
+                sum += s + m + l;
+            }
+            return sum;
+        }catch (JSONException e) {
+            e.printStackTrace();
+        }
         return 0;
     }
 
@@ -117,18 +132,11 @@ public class MainActivity extends ActionBarActivity {
 
                 JSONObject order = new JSONObject(data[i]);
                 String note = order.getString("note");
-                JSONArray menu = order.getJSONArray("menu");
-                for (int j = 0; j < menu.length(); j++) {
-                    JSONObject menuObj = menu.getJSONObject(j);
-                    String drinkName = menuObj.getString("drinkName");
-                    int s = menuObj.getInt("s");
-                    int m = menuObj.getInt("m");
-                    int l = menuObj.getInt("l");
-                }
+                JSONArray menuInfo = order.getJSONArray("menu");
 
                 item.put("note", note);
                 item.put("drink_category", getDrinkCategory());
-                item.put("drink_sum", ""+getDrinkSum());
+                item.put("drink_sum", ""+getDrinkSum(menuInfo));
 
                 mapData.add(item);
 
