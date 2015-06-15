@@ -20,7 +20,7 @@
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="MenuInfo"
-        android:id="@+id/textView5"
+        android:id="@+id/drink_category"
         android:layout_below="@+id/note"
         android:layout_alignLeft="@+id/note"
         android:layout_alignStart="@+id/note" />
@@ -30,7 +30,7 @@
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="10"
-        android:id="@+id/textView6"
+        android:id="@+id/drink_sum"
         android:layout_marginRight="16dp"
         android:layout_marginEnd="16dp"
         android:layout_alignTop="@+id/note"

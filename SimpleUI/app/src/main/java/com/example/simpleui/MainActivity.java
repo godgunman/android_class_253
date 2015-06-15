@@ -16,12 +16,19 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Hashtable;
+import java.util.List;
+import java.util.Map;
 
 public class MainActivity extends ActionBarActivity {
 
@@ -89,16 +96,29 @@ public class MainActivity extends ActionBarActivity {
         setHistoryData();
     }
 
+    private String getDrinkCategory() {
+        return "black tea, milk tea";
+    }
+
+    private int getDrinkSum() {
+        return 0;
+    }
+
     private void setHistoryData() {
         String raw = Utils.readFile(this, "history.txt");
+
         String[] data = raw.split("\n");
+        List<Map<String, String>> mapData = new ArrayList<>();
+
 
         for(int i = 0 ; i < data.length; i++) {
             try {
+                Map<String, String> item = new HashMap<>();
+
                 JSONObject order = new JSONObject(data[i]);
                 String note = order.getString("note");
                 JSONArray menu = order.getJSONArray("menu");
-                for (int j = 0; j < menu.length(); i++) {
+                for (int j = 0; j < menu.length(); j++) {
                     JSONObject menuObj = menu.getJSONObject(j);
                     String drinkName = menuObj.getString("drinkName");
                     int s = menuObj.getInt("s");
@@ -106,13 +126,21 @@ public class MainActivity extends ActionBarActivity {
                     int l = menuObj.getInt("l");
                 }
 
+                item.put("note", note);
+                item.put("drink_category", getDrinkCategory());
+                item.put("drink_sum", ""+getDrinkSum());
+
+                mapData.add(item);
+
             } catch (JSONException e) {
                 e.printStackTrace();
             }
         }
 
-        ArrayAdapter<String> adapter =
-                new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, data);
+        String[] from = {"note", "drink_category", "drink_sum"};
+        int[] to = {R.id.note, R.id.drink_category, R.id.drink_sum};
+        SimpleAdapter adapter = new SimpleAdapter(this, mapData, R.layout.listview_item, from, to);
+
         historyListView.setAdapter(adapter);
     }
 
