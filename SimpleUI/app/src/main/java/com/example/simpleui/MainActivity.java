@@ -20,6 +20,8 @@ import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.parse.Parse;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -47,6 +49,12 @@ public class MainActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        // Enable Local Datastore.
+        Parse.enableLocalDatastore(this);
+        Parse.initialize(this, "PihJMpOOpNYxpXN8wYcd3Jvn6R1x6IHOl6TA5gKc",
+                "mnPmwNUDinSNH3b4RRiScFdkNRgLFxK61DVIpXYI");
+
 
         // /data/data/com.example.simple/shared_prefs/settings.xml
         sp = getSharedPreferences("settings", Context.MODE_PRIVATE);
