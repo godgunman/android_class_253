@@ -20,8 +20,12 @@ import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.parse.FindCallback;
 import com.parse.Parse;
+import com.parse.ParseException;
 import com.parse.ParseObject;
+import com.parse.ParseQuery;
+import com.parse.SaveCallback;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -128,36 +132,36 @@ public class MainActivity extends ActionBarActivity {
     }
 
     private void setHistoryData() {
-        String raw = Utils.readFile(this, "history.txt");
 
-        String[] data = raw.split("\n");
-        List<Map<String, String>> mapData = new ArrayList<>();
+        final List<Map<String, String>> mapData = new ArrayList<>();
 
+        ParseQuery<ParseObject> query = new ParseQuery<ParseObject>("Order");
+        query.findInBackground(new FindCallback<ParseObject>() {
+            @Override
+            public void done(List<ParseObject> list, ParseException e) {
+                for (int i = 0; i < list.size(); i++) {
+                    Map<String, String> item = new HashMap<>();
 
-        for(int i = 0 ; i < data.length; i++) {
-            try {
-                Map<String, String> item = new HashMap<>();
+                    ParseObject order = list.get(i);
 
-                JSONObject order = new JSONObject(data[i]);
-                String note = order.getString("note");
-                JSONArray menuInfo = order.getJSONArray("menu");
+                    String note = order.getString("note");
+                    JSONArray menuInfo = order.getJSONArray("menu");
 
-                item.put("note", note);
-                item.put("drink_category", getDrinkCategory());
-                item.put("drink_sum", ""+getDrinkSum(menuInfo));
+                    item.put("note", note);
+                    item.put("drink_category", getDrinkCategory());
+                    item.put("drink_sum", "" + getDrinkSum(menuInfo));
 
-                mapData.add(item);
+                    mapData.add(item);
+                }
 
-            } catch (JSONException e) {
-                e.printStackTrace();
+                String[] from = {"note", "drink_category", "drink_sum"};
+                int[] to = {R.id.note, R.id.drink_category, R.id.drink_sum};
+                SimpleAdapter adapter = new SimpleAdapter(MainActivity.this,
+                        mapData, R.layout.listview_item, from, to);
+
+                historyListView.setAdapter(adapter);
             }
-        }
-
-        String[] from = {"note", "drink_category", "drink_sum"};
-        int[] to = {R.id.note, R.id.drink_category, R.id.drink_sum};
-        SimpleAdapter adapter = new SimpleAdapter(this, mapData, R.layout.listview_item, from, to);
-
-        historyListView.setAdapter(adapter);
+        });
     }
 
     private void send() {
@@ -178,8 +182,14 @@ public class MainActivity extends ActionBarActivity {
             ParseObject orderObject = new ParseObject("Order");
             orderObject.put("note", order.getString("note"));
             orderObject.put("menu", order.getJSONArray("menu"));
-            orderObject.saveInBackground();
+            orderObject.saveInBackground(new SaveCallback() {
+                @Override
+                public void done(ParseException e) {
+                    Log.d("debug", "done");
+                }
+            });
 
+            Log.d("debug", "after saveInBackground");
 
         } catch (JSONException e) {
             e.printStackTrace();
