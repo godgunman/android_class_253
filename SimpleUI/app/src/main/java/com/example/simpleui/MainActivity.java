@@ -17,6 +17,7 @@ import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -44,6 +45,7 @@ public class MainActivity extends ActionBarActivity {
     private Button sendButton;
     private CheckBox hideCheckBox;
     private ListView historyListView;
+    private Spinner spinner;
 
     private SharedPreferences sp;
     private SharedPreferences.Editor editor;
@@ -105,7 +107,17 @@ public class MainActivity extends ActionBarActivity {
         inputEditText.setText(sp.getString("input", ""));
         hideCheckBox.setChecked(sp.getBoolean("hide", false));
 
+        spinner = (Spinner) findViewById(R.id.spinner);
+        setStoreName();
+
         setHistoryData();
+    }
+    private void setStoreName() {
+
+        String[] data = {"store1", "store2"};
+
+        ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item, data);
+        spinner.setAdapter(adapter);
     }
 
     private String getDrinkCategory() {
