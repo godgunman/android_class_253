@@ -3,6 +3,7 @@ package com.example.simpleui;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.provider.MediaStore;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -40,6 +41,8 @@ import java.util.Map;
 public class MainActivity extends ActionBarActivity {
 
     private static final int REQUEST_CODE_MENU_ACTIVITY = 1;
+    private static final int REQUEST_CODE_TAKE_PHOTO = 2;
+
     private EditText inputEditText;
     private Button sendButton;
     private CheckBox hideCheckBox;
@@ -266,6 +269,12 @@ public class MainActivity extends ActionBarActivity {
         startActivity(intent);
     }
 
+    private void goToCamera() {
+        Intent intent = new Intent();
+        intent.setAction(MediaStore.ACTION_IMAGE_CAPTURE);
+        startActivityForResult(intent, REQUEST_CODE_TAKE_PHOTO);
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
@@ -297,8 +306,8 @@ public class MainActivity extends ActionBarActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+        if (id == R.id.action_take_photo) {
+            goToCamera();
         }
 
         return super.onOptionsItemSelected(item);
