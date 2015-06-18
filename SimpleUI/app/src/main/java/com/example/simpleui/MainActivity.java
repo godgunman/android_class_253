@@ -114,7 +114,7 @@ public class MainActivity extends ActionBarActivity {
     }
     private void setStoreName() {
 
-        String[] data = {"store1", "store2"};
+        String[] data = getResources().getStringArray(R.array.store_name);
 
         ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item, data);
         spinner.setAdapter(adapter);
