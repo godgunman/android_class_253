@@ -10,6 +10,7 @@ import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -18,7 +19,6 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.parse.FindCallback;
@@ -34,7 +34,6 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
 
@@ -94,6 +93,12 @@ public class MainActivity extends ActionBarActivity {
         });
 
         historyListView = (ListView) findViewById(R.id.listView);
+        historyListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                goToOrderDetail();
+            }
+        });
 
         hideCheckBox = (CheckBox) findViewById(R.id.checkBox);
         hideCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -253,6 +258,12 @@ public class MainActivity extends ActionBarActivity {
         intent.putExtra("storeInfo", storeInfo);
         startActivityForResult(intent, REQUEST_CODE_MENU_ACTIVITY);
 
+    }
+
+    private void goToOrderDetail() {
+        Intent intent = new Intent();
+        intent.setClass(this, OrderDetailActivity.class);
+        startActivity(intent);
     }
 
     @Override
