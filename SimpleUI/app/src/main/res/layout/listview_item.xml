@@ -36,4 +36,14 @@
         android:layout_alignTop="@+id/note"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="store info"
+        android:id="@+id/store_info"
+        android:layout_below="@+id/drink_category"
+        android:layout_alignLeft="@+id/drink_category"
+        android:layout_alignStart="@+id/drink_category" />
 </RelativeLayout>

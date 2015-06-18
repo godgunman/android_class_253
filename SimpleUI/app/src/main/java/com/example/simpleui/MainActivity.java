@@ -169,17 +169,20 @@ public class MainActivity extends ActionBarActivity {
                     ParseObject order = list.get(i);
 
                     String note = order.getString("note");
+                    String storeInfo = order.getString("storeInfo");
+
                     JSONArray menuInfo = order.getJSONArray("menu");
 
                     item.put("note", note);
                     item.put("drink_category", getDrinkCategory());
                     item.put("drink_sum", "" + getDrinkSum(menuInfo));
+                    item.put("store_info", storeInfo);
 
                     mapData.add(item);
                 }
 
-                String[] from = {"note", "drink_category", "drink_sum"};
-                int[] to = {R.id.note, R.id.drink_category, R.id.drink_sum};
+                String[] from = {"note", "drink_category", "drink_sum", "store_info"};
+                int[] to = {R.id.note, R.id.drink_category, R.id.drink_sum, R.id.store_info};
                 SimpleAdapter adapter = new SimpleAdapter(MainActivity.this,
                         mapData, R.layout.listview_item, from, to);
 
