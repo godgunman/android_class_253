@@ -69,6 +69,8 @@
         android:id="@+id/spinner"
         android:layout_below="@+id/button3"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentStart="true"
+        android:layout_toLeftOf="@+id/button2"
+        android:layout_above="@id/listView"/>
 
 </RelativeLayout>

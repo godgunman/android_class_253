@@ -197,6 +197,8 @@ public class MainActivity extends ActionBarActivity {
             text = "*************";
         }
 
+        String storeInfo = (String) spinner.getSelectedItem();
+
         try {
             order.put("note", text);
             if (menuInfo != null) {
@@ -206,6 +208,7 @@ public class MainActivity extends ActionBarActivity {
             ParseObject orderObject = new ParseObject("Order");
             orderObject.put("note", order.getString("note"));
             orderObject.put("menu", order.getJSONArray("menu"));
+            orderObject.put("storeInfo", storeInfo);
             orderObject.saveInBackground(new SaveCallback() {
                 @Override
                 public void done(ParseException e) {
