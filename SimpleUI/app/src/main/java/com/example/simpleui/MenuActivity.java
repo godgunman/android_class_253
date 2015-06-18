@@ -18,10 +18,15 @@ import org.json.JSONObject;
 
 public class MenuActivity extends ActionBarActivity {
 
+    private TextView storeInfo;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu);
+
+        storeInfo = (TextView) findViewById(R.id.storeInfo);
+        storeInfo.setText(getIntent().getStringExtra("storeInfo"));
     }
 
     @Override
@@ -38,7 +43,7 @@ public class MenuActivity extends ActionBarActivity {
         JSONObject data = new JSONObject();
         JSONArray result = new JSONArray();
 
-        for (int i = 0 ; i < count - 1; i++) {
+        for (int i = 1 ; i < count - 1; i++) {
             LinearLayout child = (LinearLayout) root.getChildAt(i);
             TextView drinkNameTextView = (TextView) child.getChildAt(0);
             Button smallButton = (Button) child.getChildAt(1);

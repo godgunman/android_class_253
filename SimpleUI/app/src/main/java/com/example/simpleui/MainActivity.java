@@ -243,8 +243,11 @@ public class MainActivity extends ActionBarActivity {
 
     public void goToMenu(View view) {
 
+        String storeInfo = (String) spinner.getSelectedItem();
+
         Intent intent = new Intent();
         intent.setClass(this, MenuActivity.class);
+        intent.putExtra("storeInfo", storeInfo);
         startActivityForResult(intent, REQUEST_CODE_MENU_ACTIVITY);
 
     }
