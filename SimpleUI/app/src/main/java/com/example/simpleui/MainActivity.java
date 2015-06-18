@@ -114,10 +114,22 @@ public class MainActivity extends ActionBarActivity {
     }
     private void setStoreName() {
 
-        String[] data = getResources().getStringArray(R.array.store_name);
+        ParseQuery<ParseObject> query = new ParseQuery<ParseObject>("StoreInfo");
+        query.findInBackground(new FindCallback<ParseObject>() {
+            @Override
+            public void done(List<ParseObject> list, ParseException e) {
 
-        ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item, data);
-        spinner.setAdapter(adapter);
+                List<String> data = new ArrayList<String>();
+                for (ParseObject object : list) {
+                    data.add(object.getString("name") + "," + object.getString("address"));
+                }
+                ArrayAdapter adapter = new ArrayAdapter(MainActivity.this,
+                        android.R.layout.simple_spinner_item, data);
+
+                spinner.setAdapter(adapter);
+            }
+        });
+
     }
 
     private String getDrinkCategory() {
