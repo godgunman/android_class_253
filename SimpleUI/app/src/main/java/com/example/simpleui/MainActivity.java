@@ -285,6 +285,7 @@ public class MainActivity extends ActionBarActivity {
     private void goToCamera() {
         Intent intent = new Intent();
         intent.setAction(MediaStore.ACTION_IMAGE_CAPTURE);
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, Utils.getOutputUri());
         startActivityForResult(intent, REQUEST_CODE_TAKE_PHOTO);
     }
 
@@ -298,10 +299,10 @@ public class MainActivity extends ActionBarActivity {
                 e.printStackTrace();
             }
         } else if (requestCode == REQUEST_CODE_TAKE_PHOTO && resultCode == RESULT_OK) {
-            bitmap = data.getParcelableExtra("data");
-            ImageView imageView = (ImageView) findViewById(R.id.imageView);
-            imageView.setImageBitmap(bitmap);
-            hasPhoto = true;
+//            bitmap = data.getParcelableExtra("data");
+//            ImageView imageView = (ImageView) findViewById(R.id.imageView);
+//            imageView.setImageBitmap(bitmap);
+//            hasPhoto = true;
         }
     }
 
