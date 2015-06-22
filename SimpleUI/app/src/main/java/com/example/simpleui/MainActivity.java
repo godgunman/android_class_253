@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
+import android.os.Parcelable;
 import android.provider.MediaStore;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
@@ -27,6 +28,7 @@ import android.widget.Toast;
 import com.parse.FindCallback;
 import com.parse.Parse;
 import com.parse.ParseException;
+import com.parse.ParseFile;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.SaveCallback;
@@ -55,6 +57,8 @@ public class MainActivity extends ActionBarActivity {
     private SharedPreferences.Editor editor;
 
     private JSONObject menuInfo;
+    private boolean hasPhoto = false;
+    private Bitmap bitmap;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -218,10 +222,17 @@ public class MainActivity extends ActionBarActivity {
                 order.put("menu", menuInfo.getJSONArray("result"));
             }
 
+
             ParseObject orderObject = new ParseObject("Order");
             orderObject.put("note", order.getString("note"));
             orderObject.put("menu", order.getJSONArray("menu"));
             orderObject.put("storeInfo", storeInfo);
+
+            if (hasPhoto) {
+                ParseFile file = new ParseFile("photo.png", Utils.bitmapToBytes(bitmap));
+                orderObject.put("photo", file);
+            }
+
             orderObject.saveInBackground(new SaveCallback() {
                 @Override
                 public void done(ParseException e) {
@@ -287,9 +298,10 @@ public class MainActivity extends ActionBarActivity {
                 e.printStackTrace();
             }
         } else if (requestCode == REQUEST_CODE_TAKE_PHOTO && resultCode == RESULT_OK) {
-            Bitmap bitmap = data.getParcelableExtra("data");
+            bitmap = data.getParcelableExtra("data");
             ImageView imageView = (ImageView) findViewById(R.id.imageView);
             imageView.setImageBitmap(bitmap);
+            hasPhoto = true;
         }
     }
 
