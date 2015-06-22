@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Environment;
+import android.util.Log;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -11,6 +12,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 
 /**
  * Created by ggm on 6/8/15.
@@ -69,6 +71,30 @@ public class Utils {
         }
 
         File file = new File(fileDir, "photo.png");
+
+        Log.d("debug", "file path" + file.getPath());
+
         return Uri.fromFile(file);
+    }
+
+    public static byte[] uriToBytes(Context context, Uri uri) {
+        try {
+            InputStream is = context.getContentResolver().openInputStream(uri);
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+
+            byte[] buffer = new byte[1024];
+            int len;
+
+            while( (len = is.read(buffer)) != -1 ) {
+                baos.write(buffer, 0, len);
+            }
+            return baos.toByteArray();
+
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }

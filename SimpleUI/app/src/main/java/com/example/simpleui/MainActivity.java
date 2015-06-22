@@ -229,7 +229,8 @@ public class MainActivity extends ActionBarActivity {
             orderObject.put("storeInfo", storeInfo);
 
             if (hasPhoto) {
-                ParseFile file = new ParseFile("photo.png", Utils.bitmapToBytes(bitmap));
+                ParseFile file = new ParseFile("photo.png",
+                        Utils.uriToBytes(this, Utils.getOutputUri()));
                 orderObject.put("photo", file);
             }
 
@@ -300,9 +301,9 @@ public class MainActivity extends ActionBarActivity {
             }
         } else if (requestCode == REQUEST_CODE_TAKE_PHOTO && resultCode == RESULT_OK) {
 //            bitmap = data.getParcelableExtra("data");
-//            ImageView imageView = (ImageView) findViewById(R.id.imageView);
-//            imageView.setImageBitmap(bitmap);
-//            hasPhoto = true;
+            ImageView imageView = (ImageView) findViewById(R.id.imageView);
+            imageView.setImageURI(Utils.getOutputUri());
+            hasPhoto = true;
         }
     }
 
