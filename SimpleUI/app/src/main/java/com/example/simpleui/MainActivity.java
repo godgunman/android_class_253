@@ -3,6 +3,7 @@ package com.example.simpleui;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
 import android.provider.MediaStore;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
@@ -17,6 +18,7 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.Spinner;
@@ -284,6 +286,10 @@ public class MainActivity extends ActionBarActivity {
             } catch (JSONException e) {
                 e.printStackTrace();
             }
+        } else if (requestCode == REQUEST_CODE_TAKE_PHOTO && resultCode == RESULT_OK) {
+            Bitmap bitmap = data.getParcelableExtra("data");
+            ImageView imageView = (ImageView) findViewById(R.id.imageView);
+            imageView.setImageBitmap(bitmap);
         }
     }
 
