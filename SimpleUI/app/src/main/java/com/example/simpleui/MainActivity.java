@@ -65,11 +65,6 @@ public class MainActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // Enable Local Datastore.
-        Parse.enableLocalDatastore(this);
-        Parse.initialize(this, "PihJMpOOpNYxpXN8wYcd3Jvn6R1x6IHOl6TA5gKc",
-                "mnPmwNUDinSNH3b4RRiScFdkNRgLFxK61DVIpXYI");
-
         // /data/data/com.example.simple/shared_prefs/settings.xml
         sp = getSharedPreferences("settings", Context.MODE_PRIVATE);
         editor = sp.edit();
