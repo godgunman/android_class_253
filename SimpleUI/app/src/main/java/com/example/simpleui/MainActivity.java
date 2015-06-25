@@ -23,6 +23,7 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.parse.FindCallback;
@@ -100,7 +101,9 @@ public class MainActivity extends ActionBarActivity {
         historyListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                goToOrderDetail();
+                TextView textView = (TextView) view.findViewById(R.id.store_info);
+                String address = textView.getText().toString().split(",")[1];
+                goToOrderDetail(address);
             }
         });
 
@@ -274,9 +277,10 @@ public class MainActivity extends ActionBarActivity {
 
     }
 
-    private void goToOrderDetail() {
+    private void goToOrderDetail(String address) {
         Intent intent = new Intent();
         intent.setClass(this, OrderDetailActivity.class);
+        intent.putExtra("address", address);
         startActivity(intent);
     }
 

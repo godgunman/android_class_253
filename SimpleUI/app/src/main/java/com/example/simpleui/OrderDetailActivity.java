@@ -7,6 +7,9 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+
 
 public class OrderDetailActivity extends ActionBarActivity {
 
@@ -15,8 +18,8 @@ public class OrderDetailActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_order_detail);
 
-
-        asyncTask.execute();
+        String address = getIntent().getStringExtra("address");
+        asyncTask.execute(address);
     }
 
     @Override
@@ -41,10 +44,18 @@ public class OrderDetailActivity extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    AsyncTask<Void, Void, Void> asyncTask = new AsyncTask<Void, Void, Void>() {
+    AsyncTask<String, Void, Void> asyncTask = new AsyncTask<String, Void, Void>() {
         @Override
-        protected Void doInBackground(Void... params) {
-            String out = Utils.fetch("https://maps.googleapis.com/maps/api/geocode/json?address=Taipei101");
+        protected Void doInBackground(String... params) {
+            String address = params[0];
+
+            String out = null;
+            try {
+                out = Utils.fetch("https://maps.googleapis.com/maps/api/geocode/json?address=" +
+                        URLEncoder.encode(address, "utf-8"));
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            }
             Log.d("debug", "fetch: " + out);
             return null;
         }
