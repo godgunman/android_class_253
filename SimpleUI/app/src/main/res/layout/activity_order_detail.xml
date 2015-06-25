@@ -12,10 +12,18 @@
 
     <WebView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="300dp"
         android:id="@+id/static_map"
         android:layout_below="@+id/textView5"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/static_map_2"
+        android:src="@mipmap/ic_launcher"
+        android:layout_below="@+id/static_map"
+        android:layout_centerHorizontal="true" />
 
 </RelativeLayout>
