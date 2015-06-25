@@ -119,15 +119,6 @@ public class MainActivity extends ActionBarActivity {
         spinner = (Spinner) findViewById(R.id.spinner);
         setStoreName();
         setHistoryData();
-        
-        // for demo
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                String out = Utils.fetch("https://maps.googleapis.com/maps/api/geocode/json?address=Taipei101");
-                Log.d("debug", "fetch: " + out);
-            }
-        }).start();
 
     }
     private void setStoreName() {

@@ -1,7 +1,9 @@
 package com.example.simpleui;
 
+import android.os.AsyncTask;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -12,6 +14,9 @@ public class OrderDetailActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_order_detail);
+
+
+        asyncTask.execute();
     }
 
     @Override
@@ -35,4 +40,14 @@ public class OrderDetailActivity extends ActionBarActivity {
 
         return super.onOptionsItemSelected(item);
     }
+
+    AsyncTask<Void, Void, Void> asyncTask = new AsyncTask<Void, Void, Void>() {
+        @Override
+        protected Void doInBackground(Void... params) {
+            String out = Utils.fetch("https://maps.googleapis.com/maps/api/geocode/json?address=Taipei101");
+            Log.d("debug", "fetch: " + out);
+            return null;
+        }
+    };
+
 }
