@@ -6,6 +6,10 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.webkit.WebView;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
@@ -13,10 +17,14 @@ import java.net.URLEncoder;
 
 public class OrderDetailActivity extends ActionBarActivity {
 
+    private WebView webView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_order_detail);
+
+        webView = (WebView) findViewById(R.id.static_map);
 
         String address = getIntent().getStringExtra("address");
         asyncTask.execute(address);
@@ -44,9 +52,9 @@ public class OrderDetailActivity extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    AsyncTask<String, Void, Void> asyncTask = new AsyncTask<String, Void, Void>() {
+    AsyncTask<String, Void, String> asyncTask = new AsyncTask<String, Void, String>() {
         @Override
-        protected Void doInBackground(String... params) {
+        protected String doInBackground(String... params) {
             String address = params[0];
 
             String out = null;
@@ -57,8 +65,33 @@ public class OrderDetailActivity extends ActionBarActivity {
                 e.printStackTrace();
             }
             Log.d("debug", "fetch: " + out);
-            return null;
+            return out;
+        }
+
+        @Override
+        protected void onPostExecute(String jsonString) {
+            try {
+                JSONObject object = new JSONObject(jsonString);
+                JSONObject location = object.getJSONArray("results")
+                        .getJSONObject(0)
+                        .getJSONObject("geometry")
+                        .getJSONObject("location");
+
+                double lat = location.getDouble("lat");
+                double lng = location.getDouble("lng");
+
+                String staticMapUrl = String.format(
+                        "https://maps.googleapis.com/maps/api/staticmap?center=%f,%f&zoom=15&size=600x600",
+                        lat, lng);
+
+                webView.loadUrl(staticMapUrl);
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
         }
     };
 
 }
+//https://maps.googleapis.com/maps/api/staticmap?center=25.041171,121.565227&zoom=15&size=600x600
