@@ -71,19 +71,6 @@ public class OrderDetailActivity extends ActionBarActivity {
     AsyncTask<String, Integer, String> asyncTask = new AsyncTask<String, Integer, String>() {
 
         @Override
-        protected void onProgressUpdate(Integer... values) {
-            progressDialog.setProgress(values[0]);
-        }
-
-        @Override
-        protected void onPreExecute() {
-            progressDialog.setTitle("Loading...");
-            progressDialog.setMax(100);
-            progressDialog.setCancelable(false);
-            progressDialog.show();
-        }
-
-        @Override
         protected String doInBackground(String... params) {
             String address = params[0];
 
@@ -91,7 +78,6 @@ public class OrderDetailActivity extends ActionBarActivity {
             try {
                 out = Utils.fetch("https://maps.googleapis.com/maps/api/geocode/json?address=" +
                         URLEncoder.encode(address, "utf-8"));
-                onProgressUpdate(100);
 
             } catch (UnsupportedEncodingException e) {
                 e.printStackTrace();
@@ -117,7 +103,6 @@ public class OrderDetailActivity extends ActionBarActivity {
                         lat, lng,lat, lng);
 
                 webView.loadUrl(staticMapUrl);
-                progressDialog.dismiss();
 
                 ImageLoader imageLoader = new ImageLoader();
                 imageLoader.execute(staticMapUrl);
@@ -130,6 +115,22 @@ public class OrderDetailActivity extends ActionBarActivity {
     };
 
     class ImageLoader extends AsyncTask<String, Integer, byte[]> {
+
+        @Override
+        protected void onProgressUpdate(Integer... values) {
+            progressDialog.setProgress(values[0]);
+        }
+
+        @Override
+        protected void onPreExecute() {
+            progressDialog.setTitle("ImageLoader");
+            progressDialog.setMessage("Loading...");
+            progressDialog.setCancelable(false);
+            progressDialog.setMax(100);
+            progressDialog.setProgress(0);
+            progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+            progressDialog.show();
+        }
 
         @Override
         protected byte[] doInBackground(String... params) {
@@ -145,6 +146,8 @@ public class OrderDetailActivity extends ActionBarActivity {
 
                 while( (len = is.read(buffer)) != -1 ) {
                     baos.write(buffer, 0, len);
+                    //fake
+                    onProgressUpdate(progressDialog.getProgress() + 10);
                 }
 
                 return baos.toByteArray();
@@ -161,6 +164,9 @@ public class OrderDetailActivity extends ActionBarActivity {
         protected void onPostExecute(byte[] bytes) {
             Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
             imageView.setImageBitmap(bitmap);
+
+            progressDialog.setProgress(100);
+            progressDialog.dismiss();
         }
     }
 }
