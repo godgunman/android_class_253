@@ -1,5 +1,6 @@
 package com.example.simpleui;
 
+import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
@@ -18,6 +19,7 @@ import java.net.URLEncoder;
 public class OrderDetailActivity extends ActionBarActivity {
 
     private WebView webView;
+    private ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,8 +27,10 @@ public class OrderDetailActivity extends ActionBarActivity {
         setContentView(R.layout.activity_order_detail);
 
         webView = (WebView) findViewById(R.id.static_map);
+        progressDialog = new ProgressDialog(this);
 
         String address = getIntent().getStringExtra("address");
+
         asyncTask.execute(address);
     }
 
@@ -53,6 +57,13 @@ public class OrderDetailActivity extends ActionBarActivity {
     }
 
     AsyncTask<String, Void, String> asyncTask = new AsyncTask<String, Void, String>() {
+
+        @Override
+        protected void onPreExecute() {
+            progressDialog.setTitle("Loading...");
+            progressDialog.show();
+        }
+
         @Override
         protected String doInBackground(String... params) {
             String address = params[0];
@@ -81,10 +92,11 @@ public class OrderDetailActivity extends ActionBarActivity {
                 double lng = location.getDouble("lng");
 
                 String staticMapUrl = String.format(
-                        "https://maps.googleapis.com/maps/api/staticmap?center=%f,%f&zoom=15&size=600x600",
-                        lat, lng);
+                        "https://maps.googleapis.com/maps/api/staticmap?center=%f,%f&zoom=15&size=600x600&markers=%f,%f",
+                        lat, lng,lat, lng);
 
                 webView.loadUrl(staticMapUrl);
+                progressDialog.dismiss();
 
             } catch (JSONException e) {
                 e.printStackTrace();
