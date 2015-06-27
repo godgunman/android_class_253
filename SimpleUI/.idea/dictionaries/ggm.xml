@@ -2,6 +2,7 @@
   <dictionary name="ggm">
     <words>
       <w>datastore</w>
+      <w>geocoding</w>
     </words>
   </dictionary>
 </component>

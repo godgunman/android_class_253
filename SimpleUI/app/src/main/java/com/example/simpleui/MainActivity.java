@@ -121,6 +121,9 @@ public class MainActivity extends AppCompatActivity {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 editor.putBoolean("hide", isChecked);
                 editor.commit();
+
+                ImageView imageView = (ImageView) findViewById(R.id.imageView);
+                imageView.setVisibility(isChecked ? View.GONE : View.VISIBLE);
             }
         });
 
@@ -153,7 +156,24 @@ public class MainActivity extends AppCompatActivity {
 
     //TODO (homework1)
     private String getDrinkCategory(JSONArray menu) {
-        return "black tea, milk tea";
+        try {
+            String result = null;
+            for (int j = 0; j < menu.length(); j++) {
+                JSONObject menuObj = menu.getJSONObject(j);
+                String drinkName = menuObj.getString("drinkName");
+                int s = menuObj.getInt("s");
+                int m = menuObj.getInt("m");
+                int l = menuObj.getInt("l");
+                if (s + m + l != 0) {
+                    if (result == null) result = drinkName;
+                    else result += "," + drinkName;
+                }
+            }
+            return result;
+        }catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return "";
     }
 
     private int getDrinkSum(JSONArray menu) {
@@ -169,7 +189,7 @@ public class MainActivity extends AppCompatActivity {
                 sum += s + m + l;
             }
             return sum;
-        } catch (JSONException e) {
+        }catch (JSONException e) {
             e.printStackTrace();
         }
         return 0;
@@ -211,13 +231,14 @@ public class MainActivity extends AppCompatActivity {
     }
 
     /**
+     *
      * {
-     * "note": "no ice, half sugar",
-     * "menu": [
-     * {"drinkName": "black tea", "s": 0, "m": 1, "l":1},
-     * {"drinkName": "milk tea", "s": 0, "m": 1, "l":1},
-     * {"drinkName": "green tea", "s": 0, "m": 1, "l":1}
-     * ]
+     *    "note": "no ice, half sugar",
+     *    "menu": [
+     *      {"drinkName": "black tea", "s": 0, "m": 1, "l":1},
+     *      {"drinkName": "milk tea", "s": 0, "m": 1, "l":1},
+     *      {"drinkName": "green tea", "s": 0, "m": 1, "l":1}
+     *    ]
      * }
      */
     private void send() {
