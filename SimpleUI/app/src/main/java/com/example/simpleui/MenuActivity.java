@@ -3,20 +3,20 @@ package com.example.simpleui;
 import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 
-public class MenuActivity extends ActionBarActivity {
+public class MenuActivity extends AppCompatActivity {
 
     private TextView storeInfo;
 
@@ -25,7 +25,7 @@ public class MenuActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu);
 
-        storeInfo = (TextView) findViewById(R.id.storeInfo);
+        storeInfo = (TextView) findViewById(R.id.store_info);
         storeInfo.setText(getIntent().getStringExtra("storeInfo"));
     }
 
@@ -43,7 +43,7 @@ public class MenuActivity extends ActionBarActivity {
         JSONObject data = new JSONObject();
         JSONArray result = new JSONArray();
 
-        for (int i = 1 ; i < count - 1; i++) {
+        for (int i = 1; i < count - 1; i++) {
             LinearLayout child = (LinearLayout) root.getChildAt(i);
             TextView drinkNameTextView = (TextView) child.getChildAt(0);
             Button smallButton = (Button) child.getChildAt(1);
@@ -76,6 +76,7 @@ public class MenuActivity extends ActionBarActivity {
         }
 
         return data.toString();
+    }
 /*
         {
             result: [
@@ -85,7 +86,6 @@ public class MenuActivity extends ActionBarActivity {
             ]
         }
 */
-    }
 
     public void pick(View view) {
         Button button = (Button) view;

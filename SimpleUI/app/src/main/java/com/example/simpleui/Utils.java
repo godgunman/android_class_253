@@ -88,7 +88,7 @@ public class Utils {
             byte[] buffer = new byte[1024];
             int len;
 
-            while( (len = is.read(buffer)) != -1 ) {
+            while ((len = is.read(buffer)) != -1) {
                 baos.write(buffer, 0, len);
             }
             return baos.toByteArray();
@@ -100,7 +100,7 @@ public class Utils {
         }
         return null;
     }
-    
+
     // https://maps.googleapis.com/maps/api/geocode/json?address=Taipei101
     public static String fetch(String urlString) {
 
@@ -114,7 +114,7 @@ public class Utils {
             byte[] buffer = new byte[1024];
             int len;
 
-            while( (len = is.read(buffer)) != -1 ) {
+            while ((len = is.read(buffer)) != -1) {
                 baos.write(buffer, 0, len);
             }
 

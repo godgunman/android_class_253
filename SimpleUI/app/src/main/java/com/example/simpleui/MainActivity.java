@@ -4,10 +4,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
-import android.os.Parcelable;
 import android.provider.MediaStore;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
@@ -27,7 +26,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.parse.FindCallback;
-import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseObject;
@@ -43,7 +41,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class MainActivity extends ActionBarActivity {
+public class MainActivity extends AppCompatActivity {
 
     private static final int REQUEST_CODE_MENU_ACTIVITY = 1;
     private static final int REQUEST_CODE_TAKE_PHOTO = 2;
@@ -52,7 +50,7 @@ public class MainActivity extends ActionBarActivity {
     private Button sendButton;
     private CheckBox hideCheckBox;
     private ListView historyListView;
-    private Spinner spinner;
+    private Spinner storeName;
 
     private SharedPreferences sp;
     private SharedPreferences.Editor editor;
@@ -70,7 +68,19 @@ public class MainActivity extends ActionBarActivity {
         sp = getSharedPreferences("settings", Context.MODE_PRIVATE);
         editor = sp.edit();
 
-        inputEditText = (EditText) findViewById(R.id.editText);
+        initViewsInstance();
+        initViewsValueAndListener();
+    }
+
+    private void initViewsInstance() {
+        inputEditText = (EditText) findViewById(R.id.note_input_edit_text);
+        sendButton = (Button) findViewById(R.id.send_order_button);
+        historyListView = (ListView) findViewById(R.id.listView);
+        hideCheckBox = (CheckBox) findViewById(R.id.hide_note_check_box);
+        storeName = (Spinner) findViewById(R.id.store_name_spinner);
+    }
+
+    private void initViewsValueAndListener() {
         inputEditText.setOnKeyListener(new View.OnKeyListener() {
             @Override
             public boolean onKey(View v, int keyCode, KeyEvent event) {
@@ -89,7 +99,6 @@ public class MainActivity extends ActionBarActivity {
             }
         });
 
-        sendButton = (Button) findViewById(R.id.button);
         sendButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -97,7 +106,6 @@ public class MainActivity extends ActionBarActivity {
             }
         });
 
-        historyListView = (ListView) findViewById(R.id.listView);
         historyListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -107,7 +115,7 @@ public class MainActivity extends ActionBarActivity {
             }
         });
 
-        hideCheckBox = (CheckBox) findViewById(R.id.checkBox);
+        //TODO (homework2)
         hideCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -119,12 +127,11 @@ public class MainActivity extends ActionBarActivity {
         inputEditText.setText(sp.getString("input", ""));
         hideCheckBox.setChecked(sp.getBoolean("hide", false));
 
-        spinner = (Spinner) findViewById(R.id.spinner);
-        setStoreName();
+        setStoreName(storeName);
         setHistoryData();
-
     }
-    private void setStoreName() {
+
+    private void setStoreName(final Spinner spinner) {
 
         ParseQuery<ParseObject> query = new ParseQuery<ParseObject>("StoreInfo");
         query.findInBackground(new FindCallback<ParseObject>() {
@@ -144,7 +151,8 @@ public class MainActivity extends ActionBarActivity {
 
     }
 
-    private String getDrinkCategory() {
+    //TODO (homework1)
+    private String getDrinkCategory(JSONArray menu) {
         return "black tea, milk tea";
     }
 
@@ -161,7 +169,7 @@ public class MainActivity extends ActionBarActivity {
                 sum += s + m + l;
             }
             return sum;
-        }catch (JSONException e) {
+        } catch (JSONException e) {
             e.printStackTrace();
         }
         return 0;
@@ -186,10 +194,9 @@ public class MainActivity extends ActionBarActivity {
                     JSONArray menuInfo = order.getJSONArray("menu");
 
                     item.put("note", note);
-                    item.put("drink_category", getDrinkCategory());
+                    item.put("drink_category", getDrinkCategory(menuInfo));
                     item.put("drink_sum", "" + getDrinkSum(menuInfo));
                     item.put("store_info", storeInfo);
-
                     mapData.add(item);
                 }
 
@@ -203,16 +210,22 @@ public class MainActivity extends ActionBarActivity {
         });
     }
 
+    /**
+     * {
+     * "note": "no ice, half sugar",
+     * "menu": [
+     * {"drinkName": "black tea", "s": 0, "m": 1, "l":1},
+     * {"drinkName": "milk tea", "s": 0, "m": 1, "l":1},
+     * {"drinkName": "green tea", "s": 0, "m": 1, "l":1}
+     * ]
+     * }
+     */
     private void send() {
 
         JSONObject order = new JSONObject();
 
         String text = inputEditText.getText().toString();
-        if (hideCheckBox.isChecked()) {
-            text = "*************";
-        }
-
-        String storeInfo = (String) spinner.getSelectedItem();
+        String storeInfo = (String) storeName.getSelectedItem();
 
         try {
             order.put("note", text);
@@ -251,24 +264,11 @@ public class MainActivity extends ActionBarActivity {
         Utils.writeFile(this, "history.txt", order.toString() + "\n");
         Toast.makeText(this, order.toString(), Toast.LENGTH_SHORT).show();
         inputEditText.setText("");
-
-
     }
-    /*
-        {
-            "note": "hello world",
-            "menu": [
-                {"drinkName": "black tea", "s": 0, "m": 1, "l":1},
-                {"drinkName": "milk tea", "s": 0, "m": 1, "l":1},
-                {"drinkName": "green tea", "s": 0, "m": 1, "l":1}
-            ]
-        }
-    */
-
 
     public void goToMenu(View view) {
 
-        String storeInfo = (String) spinner.getSelectedItem();
+        String storeInfo = (String) storeName.getSelectedItem();
 
         Intent intent = new Intent();
         intent.setClass(this, MenuActivity.class);

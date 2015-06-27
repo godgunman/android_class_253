@@ -6,9 +6,11 @@ import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.webkit.WebView;
 import android.widget.ImageView;
 
@@ -25,7 +27,7 @@ import java.net.URLConnection;
 import java.net.URLEncoder;
 
 
-public class OrderDetailActivity extends ActionBarActivity {
+public class OrderDetailActivity extends AppCompatActivity {
 
     private WebView webView;
     private ProgressDialog progressDialog;
@@ -43,6 +45,16 @@ public class OrderDetailActivity extends ActionBarActivity {
         String address = getIntent().getStringExtra("address");
 
         asyncTask.execute(address);
+
+    }
+
+    //TODO (homework3)
+    public void loadWebView(View view) {
+
+    }
+
+    //TODO (homework3)
+    public void loadImageView(View view) {
 
     }
 
@@ -100,7 +112,7 @@ public class OrderDetailActivity extends ActionBarActivity {
 
                 String staticMapUrl = String.format(
                         "https://maps.googleapis.com/maps/api/staticmap?center=%f,%f&zoom=15&size=600x600&markers=%f,%f",
-                        lat, lng,lat, lng);
+                        lat, lng, lat, lng);
 
                 webView.loadUrl(staticMapUrl);
 
@@ -144,7 +156,7 @@ public class OrderDetailActivity extends ActionBarActivity {
                 byte[] buffer = new byte[1024];
                 int len;
 
-                while( (len = is.read(buffer)) != -1 ) {
+                while ((len = is.read(buffer)) != -1) {
                     baos.write(buffer, 0, len);
                     //fake
                     onProgressUpdate(progressDialog.getProgress() + 10);
