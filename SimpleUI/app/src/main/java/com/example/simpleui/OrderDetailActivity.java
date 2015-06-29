@@ -14,6 +14,12 @@ import android.view.View;
 import android.webkit.WebView;
 import android.widget.ImageView;
 
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -33,6 +39,8 @@ public class OrderDetailActivity extends AppCompatActivity {
     private ProgressDialog progressDialog;
     private ImageView imageView;
 
+    private GoogleMap googleMap;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,6 +53,10 @@ public class OrderDetailActivity extends AppCompatActivity {
         String address = getIntent().getStringExtra("address");
 
         asyncTask.execute(address);
+
+        googleMap = ((SupportMapFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.google_map))
+                .getMap();
 
     }
 
@@ -109,6 +121,13 @@ public class OrderDetailActivity extends AppCompatActivity {
 
                 double lat = location.getDouble("lat");
                 double lng = location.getDouble("lng");
+
+                googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(lat, lng), 14));
+                googleMap.addMarker(new MarkerOptions()
+                        .title("Here")
+                        .snippet(getIntent().getStringExtra("address"))
+                        .position(new LatLng(lat, lng)));
+
 
                 String staticMapUrl = String.format(
                         "https://maps.googleapis.com/maps/api/staticmap?center=%f,%f&zoom=15&size=600x600&markers=%f,%f",
