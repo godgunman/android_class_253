@@ -7,12 +7,17 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
 import com.facebook.FacebookSdk;
+import com.facebook.GraphRequest;
+import com.facebook.GraphResponse;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
+
+import org.json.JSONObject;
 
 
 public class LogInActivity extends ActionBarActivity {
@@ -33,6 +38,23 @@ public class LogInActivity extends ActionBarActivity {
             @Override
             public void onSuccess(LoginResult loginResult) {
                 Log.d("debug", loginResult.getAccessToken().getToken());
+                AccessToken accessToken = loginResult.getAccessToken();
+
+                GraphRequest.newMeRequest(accessToken, new GraphRequest.GraphJSONObjectCallback() {
+                    @Override
+                    public void onCompleted(JSONObject jsonObject, GraphResponse graphResponse) {
+                        Log.d("debug", "me request: " + jsonObject.toString());
+                    }
+                }).executeAsync();
+
+                GraphRequest.newGraphPathRequest(accessToken, "/me?fields=feed", new GraphRequest.Callback() {
+                    @Override
+                    public void onCompleted(GraphResponse graphResponse) {
+                        String response = graphResponse.getRawResponse();
+                        Log.d("debug", "graph path request: " + response);
+                    }
+                }).executeAsync();
+
             }
 
             @Override
