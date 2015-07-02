@@ -6,4 +6,5 @@
     <string name="title_activity_menu">MenuActivity</string>
     <string name="title_activity_order_detail">OrderDetailActivity</string>
     <string name="title_activity_log_in">LogInActivity</string>
+    <string name="facebook_app_id">1619899251585900</string>
 </resources>
