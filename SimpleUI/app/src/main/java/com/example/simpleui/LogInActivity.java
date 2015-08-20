@@ -1,8 +1,8 @@
 package com.example.simpleui;
 
 import android.content.Intent;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -11,16 +11,17 @@ import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
-import com.facebook.FacebookSdk;
 import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
+import com.facebook.appevents.AppEventsLogger;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 
-public class LogInActivity extends ActionBarActivity {
+public class LogInActivity extends AppCompatActivity {
 
     private CallbackManager callbackManager;
     private LoginButton loginButton;
@@ -28,12 +29,35 @@ public class LogInActivity extends ActionBarActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        FacebookSdk.sdkInitialize(getApplicationContext());
-
         setContentView(R.layout.activity_log_in);
 
         callbackManager = CallbackManager.Factory.create();
+        setupLoginButton();
+
+        AccessToken accessToken = AccessToken.getCurrentAccessToken();
+
+        if (accessToken != null) {
+            GraphRequest.newMeRequest(accessToken, new GraphRequest.GraphJSONObjectCallback() {
+                @Override
+                public void onCompleted(JSONObject jsonObject, GraphResponse graphResponse) {
+
+                    //TODO
+                    String username = null;
+                    try {
+                        username = jsonObject.getString("username");
+                        goToMainPage(username);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+        }
+
+    }
+
+    private void setupLoginButton() {
         loginButton = (LoginButton) findViewById(R.id.login_button);
+        loginButton.setReadPermissions("read_stream");
         loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
@@ -44,14 +68,6 @@ public class LogInActivity extends ActionBarActivity {
                     @Override
                     public void onCompleted(JSONObject jsonObject, GraphResponse graphResponse) {
                         Log.d("debug", "me request: " + jsonObject.toString());
-                    }
-                }).executeAsync();
-
-                GraphRequest.newGraphPathRequest(accessToken, "/me?fields=feed", new GraphRequest.Callback() {
-                    @Override
-                    public void onCompleted(GraphResponse graphResponse) {
-                        String response = graphResponse.getRawResponse();
-                        Log.d("debug", "graph path request: " + response);
                     }
                 }).executeAsync();
 
@@ -67,6 +83,42 @@ public class LogInActivity extends ActionBarActivity {
                 e.printStackTrace();
             }
         });
+    }
+
+    public void getUserFeed(AccessToken accessToken) {
+        Bundle parameters = new Bundle();
+        parameters.putString("fields", "feed");
+
+        GraphRequest request = GraphRequest.newGraphPathRequest(accessToken, "/me", new GraphRequest.Callback() {
+            @Override
+            public void onCompleted(GraphResponse graphResponse) {
+                String response = graphResponse.getRawResponse();
+                Log.d("debug", "graph path request: " + response);
+            }
+        });
+
+        request.setParameters(parameters);
+        request.executeAsync();
+    }
+
+    private void goToMainPage(String username) {
+        Intent intent = new Intent(this, MainActivity.class);
+        intent.putExtra("username", username);
+        startActivity(intent);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        // Logs 'app deactivate' App Event.
+        AppEventsLogger.deactivateApp(this);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        // Logs 'install' and 'app activate' App Events.
+        AppEventsLogger.activateApp(this);
     }
 
     @Override

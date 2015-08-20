@@ -292,6 +292,14 @@ public class MainActivity extends AppCompatActivity {
         startActivityForResult(intent, REQUEST_CODE_TAKE_PHOTO);
     }
 
+    /**
+     * For view's onClick perporty.
+     * @param view
+     */
+    public void send2(View view) {
+        send();
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
@@ -307,24 +315,6 @@ public class MainActivity extends AppCompatActivity {
             imageView.setImageURI(Utils.getOutputUri());
             hasPhoto = true;
         }
-    }
-
-    public void send2(View view) {
-        send();
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        // Logs 'app deactivate' App Event.
-        AppEventsLogger.deactivateApp(this);
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        // Logs 'install' and 'app activate' App Events.
-        AppEventsLogger.activateApp(this);
     }
 
     @Override

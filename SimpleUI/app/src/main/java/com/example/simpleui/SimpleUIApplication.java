@@ -2,6 +2,7 @@ package com.example.simpleui;
 
 import android.app.Application;
 
+import com.facebook.FacebookSdk;
 import com.parse.Parse;
 
 /**
@@ -17,6 +18,8 @@ public class SimpleUIApplication extends Application {
         Parse.enableLocalDatastore(this);
         Parse.initialize(this, "PihJMpOOpNYxpXN8wYcd3Jvn6R1x6IHOl6TA5gKc",
                 "mnPmwNUDinSNH3b4RRiScFdkNRgLFxK61DVIpXYI");
+
+        FacebookSdk.sdkInitialize(getApplicationContext());
     }
 
 }
